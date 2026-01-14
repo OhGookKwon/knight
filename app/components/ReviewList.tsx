@@ -34,7 +34,7 @@ export default async function ReviewList({ storeId }: { storeId: string }) {
                                 <User size={14} className="text-gray-400" />
                             </div>
                             <span className="text-sm font-bold text-white">
-                                {review.nickname || review.user.username}
+                                {review.nickname || "손님"}
                             </span>
                         </div>
                         <span className="text-xs text-gray-600">{formatDate(review.createdAt)}</span>

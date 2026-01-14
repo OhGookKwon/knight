@@ -40,7 +40,7 @@ export async function submitReview(storeId: string, formData: FormData) {
         data: {
             rating,
             content,
-            nickname: nickname || null,
+            nickname: nickname || '손님',
             storeId,
             userId: user.id,
         }
