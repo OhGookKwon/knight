@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { updateStore, deleteStore } from "@/app/actions/store";
 import { deleteReview } from "@/app/actions/review";
-import { ChevronLeft, Trash2 } from "lucide-react";
+import { ChevronLeft, Trash2, UserRound } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
@@ -271,7 +271,9 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                                     {staff.profileImage ? (
                                         <img src={staff.profileImage} alt={staff.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="text-gray-500 text-xs">IMG</div>
+                                        <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                                            <UserRound className="text-gray-500 w-5 h-5" />
+                                        </div>
                                     )}
                                 </div>
                                 <div>

@@ -1,4 +1,4 @@
-import { Play } from 'lucide-react';
+import { Play, UserRound } from 'lucide-react';
 
 interface StaffCardProps {
     name: string;
@@ -18,11 +18,9 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
                 {profileImage ? (
                     <img src={profileImage} alt={name} className="w-full h-full object-cover" />
                 ) : (
-                    <img
-                        src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&auto=format&fit=crop&q=60"
-                        alt="Staff Placeholder"
-                        className="w-full h-full object-cover opacity-80"
-                    />
+                    <div className="w-full h-full bg-pink-50 flex items-center justify-center">
+                        <UserRound className="text-pink-300 w-8 h-8" />
+                    </div>
                 )}
                 {videoUrl && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">

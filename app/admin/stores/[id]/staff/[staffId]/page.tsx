@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { createStaff, updateStaff, deleteStaff } from "@/app/actions/staff";
-import { ChevronLeft, Trash2 } from "lucide-react";
+import { ChevronLeft, Trash2, UserRound } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
@@ -106,9 +106,13 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
 
                 <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 uppercase">프로필 이미지</label>
-                    {staff?.profileImage && (
+                    {staff?.profileImage ? (
                         <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-800 mb-2">
                             <img src={staff.profileImage} alt={staff.name} className="w-full h-full object-cover" />
+                        </div>
+                    ) : (
+                        <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-800 mb-2 bg-gray-800 flex items-center justify-center">
+                            <UserRound className="text-gray-500 w-8 h-8" />
                         </div>
                     )}
                     <input type="hidden" name="profileImage" value={staff?.profileImage || ''} />
