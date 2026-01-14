@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+
+export const dynamic = 'force-dynamic';
 import StaffSection from "@/app/components/StaffSection";
 import ReviewList from "@/app/components/ReviewList";
 import ReviewForm from "@/app/components/ReviewForm";
