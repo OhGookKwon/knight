@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import StoreCard from "./components/StoreCard";
 import Header from "./components/Header";
+import HeroSection from "./components/HeroSection";
 import SortFilter from "./components/SortFilter";
 import { Sparkles, ArrowRight } from "lucide-react";
 
