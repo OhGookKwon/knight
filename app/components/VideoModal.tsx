@@ -32,12 +32,12 @@ export default function VideoModal({ isOpen, onClose, videoUrl, mediaType = 'vid
                         </Dialog.Close>
                     </div>
 
-                    <div className="w-full aspect-[9/16] bg-black rounded-2xl overflow-hidden relative shadow-2xl border border-gray-800">
+                    <div className="w-full aspect-[3/4] bg-black rounded-2xl overflow-hidden relative shadow-2xl border border-gray-800">
                         {mediaType === 'image' ? (
                             <img
                                 src={videoUrl}
                                 alt="Staff"
-                                className="w-full relative h-[340px] object-cover"
+                                className="w-full h-full object-cover"
                             />
                         ) : isEmbed ? (
                             <div className="flex items-center justify-center h-full text-gray-500">
