@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
   const { sort } = await searchParams;
-  const currentSort = sort || 'newest'; // Default to newest
+  const currentSort = sort || 'rating'; // Default to rating
 
   let stores: any[] = [];
   try {
@@ -24,7 +24,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         }
       },
       // If sort is 'newest', we can optimize with DB sort.
-      // If 'rating', we fetch all then sort in JS.
+      // If 'rating' (default), we fetch all then sort in JS.
       orderBy: currentSort === 'newest' ? { createdAt: 'desc' } : undefined,
     });
 

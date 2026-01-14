@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Loader2 } from 'lucide-react';
 import { submitReview } from '@/app/actions/review';
 
 export default function ReviewForm({ storeId }: { storeId: string }) {
@@ -51,9 +51,14 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs transition-colors"
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting ? '등록 중...' : '리뷰 등록'}
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 size={14} className="animate-spin text-pink-500" />
+                            <span>등록 중...</span>
+                        </>
+                    ) : '리뷰 등록'}
                 </button>
             </form>
         </div>
