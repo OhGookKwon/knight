@@ -14,6 +14,13 @@ export async function submitReview(storeId: string, formData: FormData) {
         throw new Error("Invalid Rating");
     }
 
+    const cookieStore = await cookies();
+    const hasReviewed = cookieStore.get(`reviewed_${storeId}`);
+
+    if (hasReviewed) {
+        throw new Error("이미 리뷰를 작성하셨습니다.");
+    }
+
     // Find a valid user to attribute the review to (Demo mode)
     // In production, this comes from session
     let user = await prisma.user.findFirst({
@@ -45,6 +52,9 @@ export async function submitReview(storeId: string, formData: FormData) {
             userId: user.id,
         }
     });
+
+    // Mark as reviewed for this session
+    cookieStore.set(`reviewed_${storeId}`, 'true', { maxAge: 60 * 60 * 24 }); // 24 hours
 
     revalidatePath(`/stores/${storeId}`);
 }
