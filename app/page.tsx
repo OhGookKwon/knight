@@ -7,17 +7,24 @@ import { Sparkles, ArrowRight } from "lucide-react";
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const stores = await prisma.store.findMany({
-    where: { isVisible: true },
-    include: {
-      reviews: {
-        select: { rating: true }
-      },
-      _count: {
-        select: { reviews: true }
+  let stores: any[] = [];
+  try {
+    stores = await prisma.store.findMany({
+      where: { isVisible: true },
+      include: {
+        reviews: {
+          select: { rating: true }
+        },
+        _count: {
+          select: { reviews: true }
+        }
       }
-    }
-  });
+    });
+  } catch (e) {
+    console.error("Failed to fetch stores:", e);
+    // You could render an error state variable here if needed, 
+    // but for now an empty list prevents the crash.
+  }
 
   return (
     <div className="relative pb-28 min-h-screen">

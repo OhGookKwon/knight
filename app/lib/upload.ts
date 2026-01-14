@@ -1,27 +1,29 @@
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from './supabase';
 
 export async function uploadFile(file: File | null): Promise<string | null> {
     if (!file || file.size === 0) return null;
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${uuidv4()}.${fileExt}`;
+    const filePath = `${fileName}`;
 
-    // Create unique filename
-    const ext = file.name.split('.').pop();
-    const filename = `${uuidv4()}.${ext}`;
+    const { data, error } = await supabase.storage
+        .from('images') // Bucket name 'images'
+        .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false
+        });
 
-    // Ensure uploads directory exists
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    try {
-        await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-        // Ignore error if directory exists
+    if (error) {
+        console.error('Upload Error:', error);
+        throw new Error('Image upload failed');
     }
 
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
+    // Get Public URL
+    const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
 
-    return `/uploads/${filename}`;
+    return publicUrl;
 }
