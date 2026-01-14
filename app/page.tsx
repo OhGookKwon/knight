@@ -54,6 +54,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 
       <div className="p-5 space-y-8 relative z-10">
 
+        {/* Hero Section */}
+        <HeroSection />
+
         {/* Sorting Header */}
         <div className="flex items-center justify-between px-1">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
