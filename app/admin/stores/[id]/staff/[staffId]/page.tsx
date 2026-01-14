@@ -4,6 +4,7 @@ import { ChevronLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
+import SubmitButton from "@/app/components/SubmitButton";
 import { cookies } from "next/headers";
 
 export default async function StaffFormPage({ params }: { params: Promise<{ id: string, staffId: string }> }) {
@@ -148,9 +149,10 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
                     <p className="text-[10px] text-gray-500">지원 형식: MP4, WebM</p>
                 </div>
                 */}
-                <button type="submit" className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 rounded-xl transition-colors">
-                    {isNew ? '프로필 생성' : '프로필 수정'}
-                </button>
+                <SubmitButton
+                    text={isNew ? '프로필 생성' : '프로필 수정'}
+                    loadingText={isNew ? '생성 중...' : '수정 중...'}
+                />
             </form>
 
             {!isNew && (

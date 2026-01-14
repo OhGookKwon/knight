@@ -6,6 +6,7 @@ import { ChevronLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
+import SubmitButton from "@/app/components/SubmitButton";
 import { cookies } from "next/headers";
 
 export default async function ManageStorePage({ params }: { params: Promise<{ id: string }> }) {
@@ -227,9 +228,11 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                     </div>
                 </section>
 
-                <button type="submit" className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-pink-900/20">
-                    변경사항 저장
-                </button>
+                <SubmitButton
+                    text="변경사항 저장"
+                    loadingText="저장 중..."
+                    className="shadow-lg shadow-pink-900/20"
+                />
             </form>
 
             {/* Delete Store Section */}
