@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Star, Loader2 } from 'lucide-react';
 import { submitReview } from '@/app/actions/review';
 
@@ -8,17 +8,27 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
     const [rating, setRating] = useState(5);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [reviews, setReviews] = useState([]); // This might be for optimistic updates later, but for now just form logic
+    const formRef = useRef<HTMLFormElement>(null);
+
     const handleSubmit = async (formData: FormData) => {
         setIsSubmitting(true);
-        await submitReview(storeId, formData);
-        setIsSubmitting(false);
-        // Ideally clear form here used reset() or similar
+        try {
+            await submitReview(storeId, formData);
+            formRef.current?.reset(); // Clear text inputs
+            setRating(5); // Reset rating
+        } catch (error) {
+            console.error(error);
+            alert("리뷰 등록에 실패했습니다.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="bg-gray-900/50 p-4 rounded-xl border border-dashed border-gray-800 mb-6">
             <h3 className="text-sm font-bold text-white mb-3">리뷰 작성하기</h3>
-            <form action={handleSubmit} className="space-y-3">
+            <form ref={formRef} action={handleSubmit} className="space-y-3">
                 {/* Star Rating Input */}
                 <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
