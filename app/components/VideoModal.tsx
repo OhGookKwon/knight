@@ -37,7 +37,7 @@ export default function VideoModal({ isOpen, onClose, videoUrl, mediaType = 'vid
                             <img
                                 src={videoUrl}
                                 alt="Staff"
-                                className="w-full h-full object-cover"
+                                className="w-full relative h-[340px] object-cover"
                             />
                         ) : isEmbed ? (
                             <div className="flex items-center justify-center h-full text-gray-500">
