@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* 
+  Material Design 3 Dark Theme Tokens 
+  Seed Color: Pink/Purple
+*/
+:root {
+  /* Colors */
+  --md-sys-color-primary: #ffb1c8;
+  --md-sys-color-on-primary: #5e1133;
+  --md-sys-color-primary-container: #7b2949;
+  --md-sys-color-on-primary-container: #ffd9e2;
+
+  --md-sys-color-secondary: #e3bdc6;
+  --md-sys-color-on-secondary: #422931;
+  --md-sys-color-secondary-container: #5a3f47;
+  --md-sys-color-on-secondary-container: #ffd9e2;
+
+  --md-sys-color-tertiary: #efbd94;
+  --md-sys-color-on-tertiary: #48290b;
+  --md-sys-color-tertiary-container: #623f20;
+  --md-sys-color-on-tertiary-container: #ffdcc1;
+
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  --md-sys-color-background: #1f1a1c;
+  --md-sys-color-on-background: #eae0e2;
+
+  --md-sys-color-surface: #1f1a1c;
+  /* Neutral 10 */
+  --md-sys-color-on-surface: #eae0e2;
+
+  --md-sys-color-surface-variant: #514347;
+  --md-sys-color-on-surface-variant: #d5c2c6;
+
+  --md-sys-color-outline: #9e8c90;
+  --md-sys-color-outline-variant: #514347;
+
+  /* Surface Containers (M3 Elevation substitutes) */
+  --md-sys-color-surface-container-lowest: #0f0d0e;
+  --md-sys-color-surface-container-low: #1f1a1c;
+  --md-sys-color-surface-container: #231e20;
+  --md-sys-color-surface-container-high: #2d282a;
+  --md-sys-color-surface-container-highest: #383235;
+
+  /* Typography (Roboto/Inter Mapping) */
+  --md-sys-typescale-display-large-font: "Inter", sans-serif;
+  --md-sys-typescale-display-large-line-height: 64px;
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-large-tracking: -0.25px;
+  --md-sys-typescale-display-large-weight: 400;
+
+  --md-sys-typescale-headline-large-font: "Inter", sans-serif;
+  --md-sys-typescale-headline-large-line-height: 40px;
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-large-tracking: 0px;
+  --md-sys-typescale-headline-large-weight: 400;
+
+  --md-sys-typescale-title-medium-font: "Inter", sans-serif;
+  --md-sys-typescale-title-medium-line-height: 24px;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-medium-tracking: 0.15px;
+  --md-sys-typescale-title-medium-weight: 500;
+
+  --md-sys-typescale-body-medium-font: "Inter", sans-serif;
+  --md-sys-typescale-body-medium-line-height: 20px;
+  --md-sys-typescale-body-medium-size: 14px;
+  --md-sys-typescale-body-medium-tracking: 0.25px;
+  --md-sys-typescale-body-medium-weight: 400;
+
+  --md-sys-typescale-label-large-font: "Inter", sans-serif;
+  --md-sys-typescale-label-large-line-height: 20px;
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-large-tracking: 0.1px;
+  --md-sys-typescale-label-large-weight: 500;
+
+  /* State Layers */
+  --md-sys-state-hover-state-layer-opacity: 0.08;
+  --md-sys-state-focus-state-layer-opacity: 0.12;
+  --md-sys-state-pressed-state-layer-opacity: 0.12;
+
+  --md-sys-color-scrim: #000000;
+}
+
+/* Reset base styles for M3 */
+body {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: var(--md-sys-typescale-body-medium-font);
+}
+
+/* M3 Elevation / Surface Utilities */
+.surface-1 {
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.surface-2 {
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.surface-3 {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.surface-4 {
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+.m3-card {
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: 12px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.m3-card:hover {
+  background-color: var(--md-sys-color-surface-container);
+  /* Add slight elevation if needed */
+}
+
+/* Remove old utilities if they conflict, or adapt them */
+.glass-panel {
+  /* Adaptation: Make it Solid for M3, or use Surface Container Highest */
+  background-color: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 16px;
+}
+
+
+/* Utility classes */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}

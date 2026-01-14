@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      String   @default("USER") // SUPER_ADMIN, OWNER, USER
+  createdAt DateTime @default(now())
+  
+  stores    Store[]
+  reviews   Review[]
+}
+
+model Store {
+  id          String   @id @default(uuid())
+  name        String
+  region      String   // "KABUKICHO" | "SHIN_OKUBO"
+  address     String?
+  
+  // System Info
+  systemDescription String? // "1st hour 3000yen..."
+  basicCharge       String? // "60min 3000yen"
+  openingHours      String? // "19:00 - 05:00"
+  systemImage       String? // System/Price table image
+  menuImage         String? // Menu image
+  mainImage         String?
+  description       String?
+  notice            String? // "Events etc"
+  
+  // Status
+  isVerified  Boolean  @default(false)
+  isVisible   Boolean  @default(true) // For Super Admin toggle
+  likes       Int      @default(0)
+  tags        String?  // Comma separated tags e.g "K-Pop, Soju"
+
+  createdAt   DateTime @default(now())
+
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id])
+
+  staffs      Staff[]
+  reviews     Review[]
+  events      Event[]
+  images      StoreImage[]
+}
+
+model StoreImage {
+  id        String   @id @default(uuid())
+  url       String
+  caption   String?
+  createdAt DateTime @default(now())
+
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+}
+
+model Staff {
+  id          String   @id @default(uuid())
+  name        String
+  age         Int?
+  language    String?  // "Korean, Japanese, English"
+  koreanLevel Int      @default(1) // 1-5
+  styleTags   String?  // Comma separated tags
+  instaUrl    String?
+  tiktokUrl   String?
+  videoUrl    String?  // Direct video URL or embed ID
+  profileImage String?
+  isWorkingToday Boolean @default(false)
+  createdAt   DateTime @default(now())
+
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  rating       Int      @default(5)
+  content      String?
+  nickname     String?  // Guest or User nickname
+  receiptImage String?
+  createdAt    DateTime @default(now())
+
+  storeId      String
+  store        Store    @relation(fields: [storeId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  type      String   @default("DISCOUNT") // DISCOUNT | SERVICE
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id])
+}

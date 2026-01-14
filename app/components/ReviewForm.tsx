@@ -1,0 +1,61 @@
+'use client';
+
+import { useState } from 'react';
+import { Star } from 'lucide-react';
+import { submitReview } from '@/app/actions/review';
+
+export default function ReviewForm({ storeId }: { storeId: string }) {
+    const [rating, setRating] = useState(5);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (formData: FormData) => {
+        setIsSubmitting(true);
+        await submitReview(storeId, formData);
+        setIsSubmitting(false);
+        // Ideally clear form here used reset() or similar
+    };
+
+    return (
+        <div className="bg-gray-900/50 p-4 rounded-xl border border-dashed border-gray-800 mb-6">
+            <h3 className="text-sm font-bold text-white mb-3">리뷰 작성하기</h3>
+            <form action={handleSubmit} className="space-y-3">
+                {/* Star Rating Input */}
+                <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                            key={star}
+                            type="button"
+                            onClick={() => setRating(star)}
+                            className="focus:outline-none transition-transform hover:scale-110"
+                        >
+                            <Star
+                                size={24}
+                                className={star <= rating ? "text-yellow-500 fill-yellow-500" : "text-gray-700"}
+                            />
+                        </button>
+                    ))}
+                    <input type="hidden" name="rating" value={rating} />
+                </div>
+                <input
+                    name="nickname"
+                    placeholder="이름 (닉네임)"
+                    className="w-full bg-black border border-gray-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-pink-500"
+                />
+                <textarea
+                    name="content"
+                    placeholder="방문 경험은 어떠셨나요?"
+                    required
+                    rows={3}
+                    className="w-full bg-black border border-gray-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-pink-500 resize-none"
+                />
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs transition-colors"
+                >
+                    {isSubmitting ? '등록 중...' : '리뷰 등록'}
+                </button>
+            </form>
+        </div>
+    );
+}
