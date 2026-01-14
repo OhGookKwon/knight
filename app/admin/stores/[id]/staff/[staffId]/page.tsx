@@ -135,7 +135,7 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
                         <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
                     </label>
                 </div>
-
+                {/* Video 
                 <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 uppercase">짧은 영상</label>
                     <input type="hidden" name="videoUrl" value={staff?.videoUrl || ''} />
@@ -147,7 +147,7 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
                     />
                     <p className="text-[10px] text-gray-500">지원 형식: MP4, WebM</p>
                 </div>
-
+                */}
                 <button type="submit" className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 rounded-xl transition-colors">
                     {isNew ? '프로필 생성' : '프로필 수정'}
                 </button>
