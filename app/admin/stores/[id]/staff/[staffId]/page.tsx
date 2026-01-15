@@ -1,11 +1,21 @@
 import { prisma } from "@/lib/prisma";
-import { createStaff, updateStaff, deleteStaff } from "@/app/actions/staff";
-import { ChevronLeft, Trash2, UserRound } from "lucide-react";
+import { createStaff, updateStaff, deleteStaff, deleteStaffImage } from "@/app/actions/staff";
+import { ChevronLeft, Trash2, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
 import SubmitButton from "@/app/components/SubmitButton";
 import { cookies } from "next/headers";
+
+function DeleteImageButton({ imageId, storeId }: { imageId: string, storeId: string }) {
+    return (
+        <form action={deleteStaffImage.bind(null, imageId, storeId)}>
+            <button className="p-2 bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors">
+                <Trash2 size={16} />
+            </button>
+        </form>
+    );
+}
 
 export default async function StaffFormPage({ params }: { params: Promise<{ id: string, staffId: string }> }) {
     const { id, staffId } = await params;
@@ -31,7 +41,10 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
 
     let staff = null;
     if (!isNew) {
-        staff = await prisma.staff.findUnique({ where: { id: staffId } });
+        staff = await prisma.staff.findUnique({
+            where: { id: staffId },
+            include: { images: true }
+        });
         if (!staff) redirect(`/admin/stores/${id}`);
     }
 
@@ -139,6 +152,40 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
                         />
                         <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
                     </label>
+                </div>
+
+                {/* Additional Images (Gallery) */}
+                <div className="space-y-4 pt-4 border-t border-gray-800">
+                    <h3 className="text-sm font-bold text-white">추가 사진 (갤러리)</h3>
+
+                    {/* Existing Images List */}
+                    {staff?.images && staff.images.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2">
+                            {staff.images.map((img: any) => (
+                                <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden group border border-gray-800">
+                                    <img src={img.url} alt="Staff Gallery" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <DeleteImageButton imageId={img.id} storeId={id} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Check if images is undefined/null and show empty message if needed, though map handles empty array fine */}
+
+                    {/* Multi-upload Input */}
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-500 uppercase">사진 추가 (여러 장 가능)</label>
+                        <input
+                            type="file"
+                            name="images"
+                            accept="image/*"
+                            multiple
+                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                        />
+                        <p className="text-[10px] text-gray-500">여러 장을 한 번에 선택할 수 있습니다.</p>
+                    </div>
                 </div>
                 {/* Video 
                 <div className="space-y-2">

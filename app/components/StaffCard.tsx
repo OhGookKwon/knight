@@ -9,9 +9,10 @@ interface StaffCardProps {
     videoUrl: string | null;
     profileImage: string | null;
     isWorkingToday?: boolean;
+    imageCount?: number;
 }
 
-export default function StaffCard({ name, age, language, koreanLevel, styleTags, videoUrl, profileImage, isWorkingToday }: StaffCardProps) {
+export default function StaffCard({ name, age, language, koreanLevel, styleTags, videoUrl, profileImage, isWorkingToday, imageCount = 0 }: StaffCardProps) {
     return (
         <div className="m3-card p-3 flex items-center gap-4 hover:bg-[var(--md-sys-color-surface-container)] transition-colors group cursor-pointer border border-transparent hover:border-[var(--md-sys-color-outline-variant)]">
             <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border border-[var(--md-sys-color-outline-variant)]">
@@ -66,9 +67,9 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
                     <button className="text-[12px] font-medium text-[var(--md-sys-color-primary)] border border-[var(--md-sys-color-outline)] px-4 py-1.5 rounded-full hover:bg-[var(--md-sys-color-primary-container)] hover:text-[var(--md-sys-color-on-primary-container)] transition-colors whitespace-nowrap">
                         영상보기
                     </button>
-                ) : profileImage && (
-                    <button className="text-[12px] font-medium text-gray-400 border border-gray-700 px-4 py-1.5 rounded-full hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap">
-                        사진보기
+                ) : (
+                    <button className="text-[12px] font-medium text-gray-400 border border-gray-700 px-4 py-1.5 rounded-full hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+                        사진보기 {imageCount > 0 && <span className="bg-gray-600 text-white text-[9px] px-1 rounded-sm">+{imageCount}</span>}
                     </button>
                 )}
             </div>

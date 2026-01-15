@@ -25,6 +25,17 @@ export async function createStaff(storeId: string, formData: FormData) {
     const uploadedProfile = await uploadFile(profileImageFile);
     if (uploadedProfile) profileImage = uploadedProfile;
 
+    // Handle Multiple Images
+    const images = formData.getAll('images') as File[];
+    const uploadedImageUrls: string[] = [];
+
+    for (const file of images) {
+        if (file.size > 0) {
+            const url = await uploadFile(file);
+            if (url) uploadedImageUrls.push(url);
+        }
+    }
+
     // New fields
     const rawAge = formData.get('age');
     const age = rawAge ? parseInt(rawAge as string) : null;
@@ -44,7 +55,10 @@ export async function createStaff(storeId: string, formData: FormData) {
             age,
             language,
             isWorkingToday: formData.get('isWorkingToday') === 'on',
-            storeId
+            storeId,
+            images: {
+                create: uploadedImageUrls.map(url => ({ url }))
+            }
         }
     });
 
@@ -71,6 +85,24 @@ export async function updateStaff(staffId: string, storeId: string, formData: Fo
 
     const uploadedProfile = await uploadFile(profileImageFile);
     if (uploadedProfile) profileImage = uploadedProfile;
+
+    // Handle Multiple Images (Append new ones)
+    const images = formData.getAll('images') as File[];
+
+    // Upload new images
+    for (const file of images) {
+        if (file.size > 0) {
+            const url = await uploadFile(file);
+            if (url) {
+                await prisma.staffImage.create({
+                    data: {
+                        staffId,
+                        url
+                    }
+                });
+            }
+        }
+    }
 
     // New fields
     const rawAge = formData.get('age');
@@ -104,6 +136,15 @@ export async function updateStaff(staffId: string, storeId: string, formData: Fo
 export async function deleteStaff(staffId: string, storeId: string) {
     await prisma.staff.delete({
         where: { id: staffId }
+    });
+
+    revalidatePath(`/admin/stores/${storeId}`);
+    revalidatePath(`/stores/${storeId}`);
+}
+
+export async function deleteStaffImage(imageId: string, storeId: string) {
+    await prisma.staffImage.delete({
+        where: { id: imageId }
     });
 
     revalidatePath(`/admin/stores/${storeId}`);

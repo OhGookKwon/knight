@@ -14,7 +14,9 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
     const store = await prisma.store.findUnique({
         where: { id },
         include: {
-            staffs: true,
+            staffs: {
+                include: { images: true }
+            },
             reviews: true,
             images: true
         }

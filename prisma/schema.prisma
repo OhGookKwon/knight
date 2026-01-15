@@ -94,6 +94,16 @@ model Staff {
 
   storeId     String
   store       Store    @relation(fields: [storeId], references: [id])
+  images      StaffImage[]
+}
+
+model StaffImage {
+  id        String   @id @default(uuid())
+  url       String
+  createdAt DateTime @default(now())
+
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
 }
 
 model Review {
