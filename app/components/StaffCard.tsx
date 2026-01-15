@@ -38,7 +38,7 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
                         <span className="text-[12px] text-[var(--md-sys-color-on-surface-variant)]">({age})</span>
                     )}
                     <span className="text-[10px] bg-[var(--md-sys-color-surface-container-highest)] text-[var(--md-sys-color-on-surface-variant)] px-1.5 py-0.5 rounded border border-[var(--md-sys-color-outline-variant)]">
-                        Lv.{koreanLevel}
+                        한국어 Lv.{koreanLevel}
                     </span>
                 </div>
 
