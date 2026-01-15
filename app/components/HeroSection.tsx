@@ -31,7 +31,7 @@ export default function HeroSection() {
                         </span>
                     </h1>
                     <p className="text-gray-300 text-sm font-medium opacity-90 max-w-[80%]">
-                        도쿄거주 15년차 "일본어는 못하지만 신주쿠 놀만한곳 어디없어?에<br /> 일일이 대답하기 귀찮아서 만든 서비스
+                        도쿄거주 15년차 "일본어는 못하지만 신주쿠 놀만한곳 어디없어?에 대답하기 귀찮아서 만든 서비스
                     </p>
                 </div>
             </div>
