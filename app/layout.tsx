@@ -30,10 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} antialiased pb-20`}
+        className={`${inter.className} antialiased`}
       >
-        {children}
-        <BottomNav />
+        <div className="mx-auto max-w-[640px] min-h-screen bg-[var(--md-sys-color-background)] shadow-2xl relative pb-20 overflow-x-hidden">
+          {children}
+          <BottomNav />
+        </div>
+
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019197254307208"
