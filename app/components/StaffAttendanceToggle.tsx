@@ -34,6 +34,7 @@ export default function StaffAttendanceToggle({ staffId, storeId, initialIsWorki
 
     return (
         <button
+            type="button"
             onClick={(e) => {
                 e.preventDefault(); // Prevent bubbling if inside a Link
                 handleToggle();
