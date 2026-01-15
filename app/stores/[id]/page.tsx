@@ -63,16 +63,34 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
 
                 <StoreDetailView
                     store={{
-                        ...store,
+                        id: store.id,
+                        name: store.name,
+                        region: store.region,
+                        address: store.address,
+                        description: store.description,
+                        mainImage: store.mainImage,
+                        menuImage: store.menuImage,
+                        systemImage: store.systemImage,
+                        systemDescription: store.systemDescription,
+                        basicCharge: store.basicCharge,
+                        openingHours: store.openingHours,
+                        notice: store.notice,
+                        staffDescription: store.staffDescription,
+                        isVerified: store.isVerified,
+                        isVisible: store.isVisible,
+                        likes: store.likes,
+                        tags: store.tags,
                         createdAt: store.createdAt.toISOString(),
-                        staffDescription: store.staffDescription
                     }}
                     staffs={store.staffs.map((s: any) => ({
                         ...s,
                         createdAt: s.createdAt.toISOString()
                     }))}
                     reviewsCount={store.reviews.length}
-                    images={store.images}
+                    images={store.images.map((img: any) => ({
+                        ...img,
+                        createdAt: img.createdAt.toISOString()
+                    }))}
                     reviewsComponent={<ReviewList storeId={store.id} />}
                 />
             </div>
