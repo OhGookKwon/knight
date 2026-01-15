@@ -58,7 +58,7 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
             <div className="flex flex-col items-end gap-2">
                 {isWorkingToday && (
                     <span className="text-[10px] font-bold text-green-400 border border-green-500/30 px-2 py-1 rounded-full bg-green-500/10">
-                        출근중
+                        출근
                     </span>
                 )}
 
