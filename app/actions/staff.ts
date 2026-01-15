@@ -27,12 +27,20 @@ export async function createStaff(storeId: string, formData: FormData) {
 
     // Handle Multiple Images
     const images = formData.getAll('images') as File[];
+    console.log(`[createStaff] Found ${images.length} images to upload.`);
     const uploadedImageUrls: string[] = [];
 
     for (const file of images) {
         if (file.size > 0) {
-            const url = await uploadFile(file);
-            if (url) uploadedImageUrls.push(url);
+            try {
+                const url = await uploadFile(file);
+                if (url) {
+                    uploadedImageUrls.push(url);
+                    console.log(`[createStaff] Uploaded image: ${url}`);
+                }
+            } catch (e) {
+                console.error(`[createStaff] Failed to upload image: ${file.name}`, e);
+            }
         }
     }
 
@@ -45,7 +53,7 @@ export async function createStaff(storeId: string, formData: FormData) {
         throw new Error("Invalid Korean Level");
     }
 
-    await prisma.staff.create({
+    const newStaff = await prisma.staff.create({
         data: {
             name,
             koreanLevel,
@@ -61,6 +69,7 @@ export async function createStaff(storeId: string, formData: FormData) {
             }
         }
     });
+    console.log(`[createStaff] Created staff ${newStaff.id} with ${uploadedImageUrls.length} images.`);
 
     revalidatePath(`/admin/stores/${storeId}`);
     revalidatePath(`/stores/${storeId}`);
@@ -68,6 +77,7 @@ export async function createStaff(storeId: string, formData: FormData) {
 }
 
 export async function updateStaff(staffId: string, storeId: string, formData: FormData) {
+    console.log(`[updateStaff] Updating staff ${staffId}`);
     const name = formData.get('name') as string;
     const rawLevel = formData.get('koreanLevel');
     const koreanLevel = rawLevel ? parseInt(rawLevel as string) : 1;
@@ -80,26 +90,36 @@ export async function updateStaff(staffId: string, storeId: string, formData: Fo
     let videoUrl = formData.get('videoUrl') as string;
     let profileImage = formData.get('profileImage') as string;
 
-    const uploadedVideo = await uploadFile(videoFile);
-    if (uploadedVideo) videoUrl = uploadedVideo;
+    if (videoFile && videoFile.size > 0) {
+        const uploadedVideo = await uploadFile(videoFile);
+        if (uploadedVideo) videoUrl = uploadedVideo;
+    }
 
-    const uploadedProfile = await uploadFile(profileImageFile);
-    if (uploadedProfile) profileImage = uploadedProfile;
+    if (profileImageFile && profileImageFile.size > 0) {
+        const uploadedProfile = await uploadFile(profileImageFile);
+        if (uploadedProfile) profileImage = uploadedProfile;
+    }
 
     // Handle Multiple Images (Append new ones)
     const images = formData.getAll('images') as File[];
+    console.log(`[updateStaff] Found ${images.length} new images.`);
 
     // Upload new images
     for (const file of images) {
         if (file.size > 0) {
-            const url = await uploadFile(file);
-            if (url) {
-                await prisma.staffImage.create({
-                    data: {
-                        staffId,
-                        url
-                    }
-                });
+            try {
+                const url = await uploadFile(file);
+                if (url) {
+                    console.log(`[updateStaff] Uploading new image: ${url}`);
+                    await prisma.staffImage.create({
+                        data: {
+                            staffId,
+                            url
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error(`[updateStaff] Failed to upload image: ${file.name}`, e);
             }
         }
     }

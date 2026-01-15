@@ -29,21 +29,7 @@ export default function StaffSection({ staffs }: { staffs: Staff[] }) {
                 {staffs.map(staff => (
                     <div
                         key={staff.id}
-                        onClick={() => {
-                            if (staff.videoUrl) {
-                                setSelectedVideo(staff.videoUrl);
-                            } else {
-                                // Prepare images for gallery
-                                // If staff has images relation, use it. 
-                                // Also include profileImage as the first image if it exists and isn't already in the list?
-                                // Usually profileImage is separate. Let's combine them for the gallery if needed, 
-                                // or just show the 'images' collection. 
-                                // User request implies "multiple photo registration" -> likely the 'images' relation.
-                                // But easy wins: show profile image as first slide if exists.
-                                setSelectedGalleryStaff(staff);
-                            }
-                        }}
-                        className="cursor-pointer active:scale-95 transition-transform"
+                        className="active:scale-95 transition-transform"
                     >
                         <StaffCard
                             name={staff.name}
@@ -55,6 +41,8 @@ export default function StaffSection({ staffs }: { staffs: Staff[] }) {
                             profileImage={staff.profileImage}
                             isWorkingToday={staff.isWorkingToday}
                             imageCount={staff.images?.length || 0}
+                            onVideoClick={() => staff.videoUrl && setSelectedVideo(staff.videoUrl)}
+                            onPhotoClick={() => setSelectedGalleryStaff(staff)}
                         />
                     </div>
                 ))}

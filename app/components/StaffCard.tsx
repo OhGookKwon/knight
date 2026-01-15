@@ -10,12 +10,14 @@ interface StaffCardProps {
     profileImage: string | null;
     isWorkingToday?: boolean;
     imageCount?: number;
+    onVideoClick?: () => void;
+    onPhotoClick?: () => void;
 }
 
-export default function StaffCard({ name, age, language, koreanLevel, styleTags, videoUrl, profileImage, isWorkingToday, imageCount = 0 }: StaffCardProps) {
+export default function StaffCard({ name, age, language, koreanLevel, styleTags, videoUrl, profileImage, isWorkingToday, imageCount = 0, onVideoClick, onPhotoClick }: StaffCardProps) {
     return (
-        <div className="m3-card p-3 flex items-center gap-4 hover:bg-[var(--md-sys-color-surface-container)] transition-colors group cursor-pointer border border-transparent hover:border-[var(--md-sys-color-outline-variant)]">
-            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border border-[var(--md-sys-color-outline-variant)]">
+        <div className="m3-card p-3 flex items-center gap-4 hover:bg-[var(--md-sys-color-surface-container)] transition-colors group cursor-default border border-transparent hover:border-[var(--md-sys-color-outline-variant)]">
+            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border border-[var(--md-sys-color-outline-variant)] cursor-pointer" onClick={onPhotoClick}>
                 {profileImage ? (
                     <img src={profileImage} alt={name} className="w-full h-full object-cover" />
                 ) : (
@@ -32,7 +34,7 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
                 )}
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 cursor-pointer" onClick={onPhotoClick}>
                 <div className="flex items-center gap-2 mb-0.5">
                     <h3 className="text-[16px] font-medium text-[var(--md-sys-color-on-surface)] truncate">{name}</h3>
                     {age && (
@@ -63,12 +65,20 @@ export default function StaffCard({ name, age, language, koreanLevel, styleTags,
                     </span>
                 )}
 
-                {videoUrl ? (
-                    <button className="text-[12px] font-medium text-[var(--md-sys-color-primary)] border border-[var(--md-sys-color-outline)] px-4 py-1.5 rounded-full hover:bg-[var(--md-sys-color-primary-container)] hover:text-[var(--md-sys-color-on-primary-container)] transition-colors whitespace-nowrap">
+                {videoUrl && (
+                    <button
+                        onClick={onVideoClick}
+                        className="text-[12px] font-medium text-[var(--md-sys-color-primary)] border border-[var(--md-sys-color-outline)] px-4 py-1.5 rounded-full hover:bg-[var(--md-sys-color-primary-container)] hover:text-[var(--md-sys-color-on-primary-container)] transition-colors whitespace-nowrap mb-1"
+                    >
                         영상보기
                     </button>
-                ) : (
-                    <button className="text-[12px] font-medium text-gray-400 border border-gray-700 px-4 py-1.5 rounded-full hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
+                )}
+
+                {(profileImage || imageCount > 0) && (
+                    <button
+                        onClick={onPhotoClick}
+                        className="text-[12px] font-medium text-gray-400 border border-gray-700 px-4 py-1.5 rounded-full hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1"
+                    >
                         사진보기 {imageCount > 0 && <span className="bg-gray-600 text-white text-[9px] px-1 rounded-sm">+{imageCount}</span>}
                     </button>
                 )}
