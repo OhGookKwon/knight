@@ -14,12 +14,7 @@ export async function submitReview(storeId: string, formData: FormData) {
         throw new Error("Invalid Rating");
     }
 
-    const cookieStore = await cookies();
-    const hasReviewed = cookieStore.get(`reviewed_${storeId}`);
 
-    if (hasReviewed) {
-        throw new Error("하루에 한 번만 리뷰를 작성할 수 있습니다.");
-    }
 
     // Find a valid user to attribute the review to (Demo mode)
     // In production, this comes from session
@@ -53,8 +48,7 @@ export async function submitReview(storeId: string, formData: FormData) {
         }
     });
 
-    // Mark as reviewed for this session
-    cookieStore.set(`reviewed_${storeId}`, 'true', { maxAge: 60 * 60 * 24 }); // 24 hours
+
 
     revalidatePath(`/stores/${storeId}`);
 }

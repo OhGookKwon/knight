@@ -19,7 +19,7 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
             alert("리뷰가 접수되었습니다. 관리자 승인 후 게시됩니다.");
         } catch (error) {
             console.error(error);
-            alert("이미 작성하셨거나, 하루에 한 번만 작성 가능합니다.");
+            alert("리뷰 등록에 실패했습니다.");
         }
     };
 
