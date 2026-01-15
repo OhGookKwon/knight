@@ -7,7 +7,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
 import SubmitButton from "@/app/components/SubmitButton";
-import GoogleMapsImport from "@/app/components/GoogleMapsImport";
 import { cookies } from "next/headers";
 
 export default async function ManageStorePage({ params }: { params: Promise<{ id: string }> }) {
@@ -43,7 +42,6 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                 <h1 className="text-xl font-bold text-white">가게 정보 수정</h1>
             </div>
 
-            <GoogleMapsImport />
 
             <form action={updateStoreWithId} className="space-y-8">
                 {/* Basic Info */}
@@ -245,16 +243,18 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
             </form>
 
             {/* Delete Store Section */}
-            {isSuperAdmin && (
-                <div className="mt-12 pt-8 border-t border-gray-800">
-                    <DeleteButton
-                        entityName="가게"
-                        onDelete={deleteStore.bind(null, store.id)}
-                        className="w-full bg-black hover:bg-red-900/20 text-red-500 font-bold py-4 rounded-xl transition-colors border border-gray-800 flex items-center justify-center gap-2"
-                    />
-                    <p className="text-center text-gray-600 text-xs mt-2">이 작업은 되돌릴 수 없습니다.</p>
-                </div>
-            )}
+            {
+                isSuperAdmin && (
+                    <div className="mt-12 pt-8 border-t border-gray-800">
+                        <DeleteButton
+                            entityName="가게"
+                            onDelete={deleteStore.bind(null, store.id)}
+                            className="w-full bg-black hover:bg-red-900/20 text-red-500 font-bold py-4 rounded-xl transition-colors border border-gray-800 flex items-center justify-center gap-2"
+                        />
+                        <p className="text-center text-gray-600 text-xs mt-2">이 작업은 되돌릴 수 없습니다.</p>
+                    </div>
+                )
+            }
 
             {/* Staff Management */}
             <section className="mt-12 pt-8 border-t border-gray-800 space-y-6">
@@ -301,53 +301,55 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
             </section>
 
             {/* Review Management (Super Admin Only) */}
-            {isSuperAdmin && (
-                <section className="mt-12 pt-8 border-t border-gray-800 space-y-6">
-                    <h2 className="text-xl font-bold text-white">리뷰 관리</h2>
-                    <div className="space-y-4">
-                        {store.reviews.map((review: any) => (
-                            <div key={review.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                                <div className="flex justify-between items-start mb-2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs text-gray-500 font-bold">
-                                            {review.user?.username?.[0] || '?'}
+            {
+                isSuperAdmin && (
+                    <section className="mt-12 pt-8 border-t border-gray-800 space-y-6">
+                        <h2 className="text-xl font-bold text-white">리뷰 관리</h2>
+                        <div className="space-y-4">
+                            {store.reviews.map((review: any) => (
+                                <div key={review.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs text-gray-500 font-bold">
+                                                {review.user?.username?.[0] || '?'}
+                                            </div>
+                                            <div>
+                                                <div className="text-sm font-bold text-white">{review.user?.username || 'Unknown'}</div>
+                                                <div className="text-xs text-yellow-500">★ {review.rating}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div className="text-sm font-bold text-white">{review.user?.username || 'Unknown'}</div>
-                                            <div className="text-xs text-yellow-500">★ {review.rating}</div>
+                                        <div className="flex items-center gap-2">
+                                            <DeleteButton
+                                                entityName="리뷰"
+                                                onDelete={deleteReview.bind(null, review.id, store.id)}
+                                                className="text-xs text-red-500 hover:bg-red-900/20 px-3 py-1.5 rounded-lg transition-colors"
+                                            />
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <DeleteButton
-                                            entityName="리뷰"
-                                            onDelete={deleteReview.bind(null, review.id, store.id)}
-                                            className="text-xs text-red-500 hover:bg-red-900/20 px-3 py-1.5 rounded-lg transition-colors"
+                                    <form action={async (formData) => {
+                                        'use server';
+                                        const { updateReview } = await import("@/app/actions/review");
+                                        await updateReview(review.id, store.id, formData);
+                                    }} className="group">
+                                        <textarea
+                                            name="content"
+                                            defaultValue={review.content}
+                                            className="w-full bg-transparent border-none text-sm text-gray-300 focus:bg-gray-800 focus:p-2 rounded resize-none"
                                         />
-                                    </div>
+                                        <input type="hidden" name="rating" value={review.rating} />
+                                        <button type="submit" className="hidden group-focus-within:block text-xs bg-blue-600 text-white px-3 py-1 rounded mt-2">수정 저장</button>
+                                    </form>
                                 </div>
-                                <form action={async (formData) => {
-                                    'use server';
-                                    const { updateReview } = await import("@/app/actions/review");
-                                    await updateReview(review.id, store.id, formData);
-                                }} className="group">
-                                    <textarea
-                                        name="content"
-                                        defaultValue={review.content}
-                                        className="w-full bg-transparent border-none text-sm text-gray-300 focus:bg-gray-800 focus:p-2 rounded resize-none"
-                                    />
-                                    <input type="hidden" name="rating" value={review.rating} />
-                                    <button type="submit" className="hidden group-focus-within:block text-xs bg-blue-600 text-white px-3 py-1 rounded mt-2">수정 저장</button>
-                                </form>
-                            </div>
-                        ))}
-                        {store.reviews.length === 0 && (
-                            <div className="text-center py-8 text-gray-500 text-sm bg-gray-900/30 rounded-xl border border-dashed border-gray-800">
-                                리뷰가 없습니다.
-                            </div>
-                        )}
-                    </div>
-                </section>
-            )}
-        </div>
+                            ))}
+                            {store.reviews.length === 0 && (
+                                <div className="text-center py-8 text-gray-500 text-sm bg-gray-900/30 rounded-xl border border-dashed border-gray-800">
+                                    리뷰가 없습니다.
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                )
+            }
+        </div >
     );
 }
