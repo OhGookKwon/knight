@@ -62,8 +62,15 @@ export default async function StorePage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <StoreDetailView
-                    store={store}
-                    staffs={store.staffs}
+                    store={{
+                        ...store,
+                        createdAt: store.createdAt.toISOString(),
+                        staffDescription: store.staffDescription
+                    }}
+                    staffs={store.staffs.map((s: any) => ({
+                        ...s,
+                        createdAt: s.createdAt.toISOString()
+                    }))}
                     reviewsCount={store.reviews.length}
                     images={store.images}
                     reviewsComponent={<ReviewList storeId={store.id} />}

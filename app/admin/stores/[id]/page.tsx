@@ -334,6 +334,15 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                                 </div>
                             </Link>
 
+                            {/* Toggle Button - Float Right */}
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-1">
+                                <StaffAttendanceToggle
+                                    staffId={staff.id}
+                                    storeId={store.id}
+                                    initialIsWorking={staff.isWorkingToday}
+                                />
+                                <span className="text-[10px] text-gray-500">{staff.isWorkingToday ? '출근' : '휴무'}</span>
+                            </div>
 
                         </div>
                     ))}
