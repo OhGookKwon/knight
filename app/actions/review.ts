@@ -65,7 +65,7 @@ export async function deleteReview(reviewId: string, storeId: string) {
     if (!session) throw new Error("Unauthorized");
 
     const user = JSON.parse(session.value);
-    const user = JSON.parse(session.value);
+
 
     // Check if user is Super Admin or Owner of the store
     if (user.role !== 'SUPER_ADMIN') {
