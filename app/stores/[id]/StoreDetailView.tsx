@@ -17,6 +17,7 @@ interface Store {
     basicCharge: string | null;
     systemDescription: string | null;
     menuImage: string | null;
+    staffDescription: string | null;
     notice: string | null;
 }
 
@@ -133,6 +134,14 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
             {/* All Staff Content */}
             <Tabs.Content value="staff" className="outline-none animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <h2 className="text-lg font-bold text-white mb-4">전체 직원 명단</h2>
+
+                {store.staffDescription && (
+                    <div className="mb-6 glass-panel p-5 rounded-2xl border-l-2 border-yellow-500 bg-yellow-500/5">
+                        <h3 className="text-xs font-bold text-yellow-500 mb-2 uppercase">Staff Concept</h3>
+                        <p className="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap">{store.staffDescription}</p>
+                    </div>
+                )}
+
                 <div className="grid gap-3">
                     <StaffSection staffs={staffs} />
                 </div>

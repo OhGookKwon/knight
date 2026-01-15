@@ -69,6 +69,7 @@ export async function updateStore(storeId: string, formData: FormData) {
     const openingHours = formData.get('openingHours') as string;
     const basicCharge = formData.get('basicCharge') as string;
     const systemDescription = formData.get('systemDescription') as string;
+    const staffDescription = formData.get('staffDescription') as string;
     const notice = formData.get('notice') as string;
     const isVisible = formData.get('isVisible') === 'on';
     // Link tags
@@ -82,6 +83,7 @@ export async function updateStore(storeId: string, formData: FormData) {
             region,
             address,
             description,
+            staffDescription,
             mainImage,
             openingHours,
             basicCharge,

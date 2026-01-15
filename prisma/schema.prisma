@@ -47,6 +47,7 @@ model Store {
   menuImage         String? // Menu image
   mainImage         String?
   description       String?
+  staffDescription  String? // Introduction text for staff section
   notice            String? // "Events etc"
   
   // Status
