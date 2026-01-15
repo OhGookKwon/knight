@@ -8,7 +8,7 @@ export default function HeroSection() {
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?q=80&w=2000&auto=format&fit=crop"
+                    src="/images/hero-bg-v2.png"
                     alt="Shinjuku Night"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
