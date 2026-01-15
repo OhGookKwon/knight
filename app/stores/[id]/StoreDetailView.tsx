@@ -101,7 +101,7 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
 
                 {/* System Info Section */}
                 <div>
-                    <h2 className="text-lg font-bold text-white mb-4">시스템 정보</h2>
+                    <h2 className="text-lg font-bold text-white mb-4">바 시스템</h2>
                     <div className="glass-panel p-6 rounded-2xl space-y-6 text-sm text-gray-300">
 
                         {store.notice && (
@@ -124,7 +124,7 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
 
                         {store.systemDescription && (
                             <div>
-                                <p className="text-xs font-bold text-gray-500 uppercase mb-2">시스템 설명</p>
+                                <p className="text-xs font-bold text-gray-500 uppercase mb-2">바 시스템 설명</p>
                                 <div className="leading-relaxed whitespace-pre-wrap">{store.systemDescription}</div>
                             </div>
                         )}
