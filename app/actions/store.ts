@@ -91,8 +91,7 @@ export async function updateStore(storeId: string, formData: FormData) {
             menuImage,
             notice,
             isVisible,
-            notice,
-            isVisible,
+
             tags,
             autoApproveReviews: formData.get('autoApproveReviews') === 'on'
         }
