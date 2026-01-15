@@ -295,35 +295,38 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {store.staffs.map((staff: any) => (
-                        <Link
-                            key={staff.id}
-                            href={`/admin/stores/${id}/staff/${staff.id}`}
-                            className="block bg-gray-900/50 border border-gray-800 rounded-xl p-3 hover:border-gray-600 transition-colors"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden">
-                                    {staff.profileImage ? (
-                                        <img src={staff.profileImage} alt={staff.name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-                                            <UserRound className="text-gray-500 w-5 h-5" />
-                                        </div>
-                                    )}
+                        <div key={staff.id} className="relative group bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-colors">
+                            <Link
+                                href={`/admin/stores/${id}/staff/${staff.id}`}
+                                className="block p-3 pr-12"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden shrink-0">
+                                        {staff.profileImage ? (
+                                            <img src={staff.profileImage} alt={staff.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                                                <UserRound className="text-gray-500 w-5 h-5" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-white font-bold text-sm truncate">{staff.name}</div>
+                                        <div className="text-gray-500 text-xs text-ellipsis overflow-hidden whitespace-nowrap">Lv.{staff.koreanLevel}</div>
+                                    </div>
                                 </div>
-                                <div className="flex-1">
-                                    <div className="text-white font-bold text-sm">{staff.name}</div>
-                                    <div className="text-gray-500 text-xs text-ellipsis overflow-hidden whitespace-nowrap">Lv.{staff.koreanLevel}</div>
-                                </div>
-                                <div onClick={(e) => e.stopPropagation()} className="relative z-10 flex flex-col items-center gap-1">
-                                    <StaffAttendanceToggle
-                                        staffId={staff.id}
-                                        storeId={store.id}
-                                        initialIsWorking={staff.isWorkingToday}
-                                    />
-                                    <span className="text-[10px] text-gray-500">{staff.isWorkingToday ? '출근' : '휴무'}</span>
-                                </div>
+                            </Link>
+
+                            {/* Toggle Button - Float Right */}
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-1">
+                                <StaffAttendanceToggle
+                                    staffId={staff.id}
+                                    storeId={store.id}
+                                    initialIsWorking={staff.isWorkingToday}
+                                />
+                                <span className="text-[10px] text-gray-500">{staff.isWorkingToday ? '출근' : '휴무'}</span>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                     {store.staffs.length === 0 && (
                         <div className="col-span-full text-center py-8 text-gray-500 text-sm bg-gray-900/30 rounded-xl border border-dashed border-gray-800">
