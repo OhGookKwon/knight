@@ -7,7 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
 import SubmitButton from "@/app/components/SubmitButton";
-import InstagramImport from "@/app/components/InstagramImport";
+import GoogleMapsImport from "@/app/components/GoogleMapsImport";
 import { cookies } from "next/headers";
 
 export default async function ManageStorePage({ params }: { params: Promise<{ id: string }> }) {
@@ -43,7 +43,7 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                 <h1 className="text-xl font-bold text-white">가게 정보 수정</h1>
             </div>
 
-            <InstagramImport />
+            <GoogleMapsImport />
 
             <form action={updateStoreWithId} className="space-y-8">
                 {/* Basic Info */}
