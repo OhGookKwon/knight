@@ -34,22 +34,35 @@ export async function updateStore(storeId: string, formData: FormData) {
     const address = formData.get('address') as string;
     const description = formData.get('description') as string;
 
-    // Handle File Uploads
+    // Handle File Uploads or URLs
     const mainImageFile = formData.get('mainImageFile') as File | null;
+    const mainImageUrl = formData.get('mainImageUrl') as string;
+
     const menuImageFile = formData.get('menuImageFile') as File | null;
+    const menuImageUrl = formData.get('menuImageUrl') as string;
 
     let mainImage = formData.get('mainImage') as string;
     let menuImage = formData.get('menuImage') as string;
 
+    // Main Image Logic: Upload > URL > Existing
     const uploadedMain = await uploadFile(mainImageFile);
-    if (uploadedMain) mainImage = uploadedMain;
+    if (uploadedMain) {
+        mainImage = uploadedMain;
+    } else if (mainImageUrl && mainImageUrl.trim() !== '') {
+        mainImage = mainImageUrl.trim();
+    }
 
+    // Menu Image Logic: Upload > URL > Existing
     const uploadedMenu = await uploadFile(menuImageFile);
-    if (uploadedMenu) menuImage = uploadedMenu;
+    if (uploadedMenu) {
+        menuImage = uploadedMenu;
+    } else if (menuImageUrl && menuImageUrl.trim() !== '') {
+        menuImage = menuImageUrl.trim();
+    }
 
     // Handle Deletion Flags
     if (formData.get('deleteMenuImage') === 'on') {
-        menuImage = null as any; // Allow null to clear the field in Prisma
+        menuImage = null as any;
     }
 
     // New Fields
@@ -86,24 +99,32 @@ export async function updateStore(storeId: string, formData: FormData) {
         await prisma.storeImage.deleteMany({
             where: {
                 id: { in: deleteImageIds },
-                storeId: storeId // Security check to ensure it belongs to this store
+                storeId: storeId
             }
         });
     }
 
-    // Handle Gallery Uploads
+    // Handle Gallery Uploads (Files)
     const galleryFiles = formData.getAll('galleryImages') as File[];
     for (const file of galleryFiles) {
         if (file.size > 0) {
             const url = await uploadFile(file);
             if (url) {
                 await prisma.storeImage.create({
-                    data: {
-                        url,
-                        storeId
-                    }
+                    data: { url, storeId }
                 });
             }
+        }
+    }
+
+    // Handle Gallery URLs (Text)
+    const galleryUrlsStr = formData.get('galleryImageUrls') as string;
+    if (galleryUrlsStr) {
+        const urls = galleryUrlsStr.split(/\r?\n/).map(u => u.trim()).filter(u => u !== '');
+        for (const url of urls) {
+            await prisma.storeImage.create({
+                data: { url, storeId }
+            });
         }
     }
 

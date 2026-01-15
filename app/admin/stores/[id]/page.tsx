@@ -141,12 +141,20 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                             </div>
                         )}
                         <input type="hidden" name="mainImage" value={store.mainImage || ''} />
-                        <input
-                            type="file"
-                            name="mainImageFile"
-                            accept="image/*"
-                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
-                        />
+                        <div className="flex flex-col gap-2">
+                            <input
+                                type="file"
+                                name="mainImageFile"
+                                accept="image/*"
+                                className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                            />
+                            <input
+                                type="text"
+                                name="mainImageUrl"
+                                placeholder="또는 이미지 주소(URL) 직접 입력"
+                                className="w-full bg-black/50 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 placeholder-gray-600"
+                            />
+                        </div>
                     </div>
 
                     {/* Menu Image */}
@@ -164,12 +172,20 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                             </div>
                         )}
                         <input type="hidden" name="menuImage" value={store.menuImage || ''} />
-                        <input
-                            type="file"
-                            name="menuImageFile"
-                            accept="image/*"
-                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
-                        />
+                        <div className="flex flex-col gap-2">
+                            <input
+                                type="file"
+                                name="menuImageFile"
+                                accept="image/*"
+                                className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                            />
+                            <input
+                                type="text"
+                                name="menuImageUrl"
+                                placeholder="또는 이미지 주소(URL) 직접 입력"
+                                className="w-full bg-black/50 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500 placeholder-gray-600"
+                            />
+                        </div>
                     </div>
 
                     {/* Gallery Images */}
@@ -193,14 +209,22 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                             </div>
                         )}
 
-                        <input
-                            type="file"
-                            name="galleryImages"
-                            accept="image/*"
-                            multiple
-                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                        />
-                        <p className="text-[10px] text-gray-500 mt-1">여러 장의 이미지를 선택할 수 있습니다. 이미지를 삭제하려면 체크박스를 선택하고 저장하세요.</p>
+                        <div className="space-y-3">
+                            <input
+                                type="file"
+                                name="galleryImages"
+                                accept="image/*"
+                                multiple
+                                className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                            />
+                            <textarea
+                                name="galleryImageUrls"
+                                rows={2}
+                                placeholder="또는 이미지 주소(URL) 입력 (여러 개일 경우 줄바꿈으로 구분)"
+                                className="w-full bg-black/50 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 placeholder-gray-600 resize-none"
+                            />
+                        </div>
+                        <p className="text-[10px] text-gray-500 mt-1">파일 업로드 또는 URL 입력 중 편한 방법을 사용하세요. (혼용 가능)</p>
                     </div>
                 </section>
 
