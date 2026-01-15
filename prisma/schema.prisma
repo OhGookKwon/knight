@@ -55,6 +55,7 @@ model Store {
   isVisible   Boolean  @default(true) // For Super Admin toggle
   likes       Int      @default(0)
   tags        String?  // Comma separated tags e.g "K-Pop, Soju"
+  autoApproveReviews Boolean @default(true)
 
   createdAt   DateTime @default(now())
 

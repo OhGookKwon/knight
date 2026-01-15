@@ -248,6 +248,19 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                             </label>
                         </div>
 
+                        <div className="flex items-center gap-3 bg-black/20 p-3 rounded-xl border border-gray-800/50">
+                            <input
+                                type="checkbox"
+                                name="autoApproveReviews"
+                                id="autoApproveReviews"
+                                defaultChecked={store.autoApproveReviews}
+                                className="w-5 h-5 rounded border-gray-700 bg-gray-900 text-blue-600 focus:ring-blue-500"
+                            />
+                            <label htmlFor="autoApproveReviews" className="text-sm font-bold text-white cursor-pointer select-none">
+                                리뷰 자동 승인 (현재: {store.autoApproveReviews ? '켜짐' : '꺼짐'})
+                            </label>
+                        </div>
+
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-gray-500 uppercase">태그 (쉼표로 구분)</label>
                             <input

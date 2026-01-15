@@ -38,6 +38,12 @@ export async function submitReview(storeId: string, formData: FormData) {
         });
     }
 
+    // Check Store's Auto-Approve Setting
+    const store = await prisma.store.findUnique({
+        where: { id: storeId },
+        select: { autoApproveReviews: true }
+    });
+
     await prisma.review.create({
         data: {
             rating,
@@ -45,6 +51,7 @@ export async function submitReview(storeId: string, formData: FormData) {
             nickname: nickname || '손님',
             storeId,
             userId: user.id,
+            isApproved: store?.autoApproveReviews ?? true // Default to true if not found (safer)
         }
     });
 
