@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { Fragment } from "react";
 import StoreCard from "./components/StoreCard";
+import GoogleAd from "./components/GoogleAd";
 import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 import SortFilter from "./components/SortFilter";
@@ -68,18 +70,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         {/* Store List */}
         <div className="space-y-6">
           <div className="space-y-4">
-            {stores.map((store: any) => {
+            {stores.map((store: any, index: number) => {
               return (
-                <StoreCard
-                  key={store.id}
-                  id={store.id}
-                  name={store.name}
-                  region={store.region}
-                  mainImage={store.mainImage}
-                  tags={store.tags ? store.tags.split(',').map((t: string) => t.trim()) : []}
-                  rating={Number(store.averageRating.toFixed(1))}
-                  likes={store.likes} // Pass likes
-                />
+                <Fragment key={store.id}>
+                  <StoreCard
+                    id={store.id}
+                    name={store.name}
+                    region={store.region}
+                    mainImage={store.mainImage}
+                    tags={store.tags ? store.tags.split(',').map((t: string) => t.trim()) : []}
+                    rating={Number(store.averageRating.toFixed(1))}
+                    likes={store.likes} // Pass likes
+                  />
+                  {(index + 1) % 2 === 0 && <GoogleAd />}
+                </Fragment>
               );
             })}
           </div>
