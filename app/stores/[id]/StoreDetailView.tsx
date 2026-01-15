@@ -65,12 +65,7 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
                 >
                     전체 직원
                 </Tabs.Trigger>
-                <Tabs.Trigger
-                    value="system"
-                    className="flex-1 py-2.5 text-xs font-bold text-gray-400 rounded-xl transition-all data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-lg hover:text-white data-[state=active]:hover:text-black"
-                >
-                    시스템
-                </Tabs.Trigger>
+
                 <Tabs.Trigger
                     value="map"
                     className="flex-1 py-2.5 text-xs font-bold text-gray-400 rounded-xl transition-all data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-lg hover:text-white data-[state=active]:hover:text-black"
@@ -103,6 +98,47 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
 
                 {/* Ad Space */}
                 <GoogleAd />
+
+                {/* System Info Section */}
+                <div>
+                    <h2 className="text-lg font-bold text-white mb-4">시스템 정보</h2>
+                    <div className="glass-panel p-6 rounded-2xl space-y-6 text-sm text-gray-300">
+
+                        {store.notice && (
+                            <div className="bg-pink-500/10 border border-pink-500/20 p-3 rounded-xl">
+                                <h3 className="text-xs font-bold text-pink-400 mb-1">📢 공지사항</h3>
+                                <p className="text-sm text-gray-200">{store.notice}</p>
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-6">
+                            <div>
+                                <p className="text-xs font-bold text-gray-500 uppercase mb-1">영업 시간</p>
+                                <p className="text-white text-base">{store.openingHours || '정보 없음'}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs font-bold text-gray-500 uppercase mb-1">기본 요금</p>
+                                <p className="text-white text-base">{store.basicCharge || '정보 없음'}</p>
+                            </div>
+                        </div>
+
+                        {store.systemDescription && (
+                            <div>
+                                <p className="text-xs font-bold text-gray-500 uppercase mb-2">시스템 설명</p>
+                                <div className="leading-relaxed whitespace-pre-wrap">{store.systemDescription}</div>
+                            </div>
+                        )}
+
+                        {store.menuImage && (
+                            <div className="pt-2">
+                                <h3 className="text-xs font-bold text-gray-500 mb-2 uppercase">이벤트</h3>
+                                <div className="rounded-xl overflow-hidden border border-white/10">
+                                    <img src={store.menuImage} alt="Menu" className="w-full h-auto" />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
 
                 {/* Gallery Section */}
                 <div>
@@ -153,46 +189,7 @@ export default function StoreDetailView({ store, staffs, reviewsCount, images = 
                 </div>
             </Tabs.Content>
 
-            {/* System Content */}
-            <Tabs.Content value="system" className="outline-none animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <h2 className="text-lg font-bold text-white mb-4">시스템 정보</h2>
-                <div className="glass-panel p-6 rounded-2xl space-y-6 text-sm text-gray-300">
 
-                    {store.notice && (
-                        <div className="bg-pink-500/10 border border-pink-500/20 p-3 rounded-xl">
-                            <h3 className="text-xs font-bold text-pink-400 mb-1">📢 공지사항</h3>
-                            <p className="text-sm text-gray-200">{store.notice}</p>
-                        </div>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-6">
-                        <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase mb-1">영업 시간</p>
-                            <p className="text-white text-base">{store.openingHours || '정보 없음'}</p>
-                        </div>
-                        <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase mb-1">기본 요금</p>
-                            <p className="text-white text-base">{store.basicCharge || '정보 없음'}</p>
-                        </div>
-                    </div>
-
-                    {store.systemDescription && (
-                        <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase mb-2">시스템 설명</p>
-                            <div className="leading-relaxed whitespace-pre-wrap">{store.systemDescription}</div>
-                        </div>
-                    )}
-
-                    {store.menuImage && (
-                        <div className="pt-2">
-                            <h3 className="text-xs font-bold text-gray-500 mb-2 uppercase">이벤트</h3>
-                            <div className="rounded-xl overflow-hidden border border-white/10">
-                                <img src={store.menuImage} alt="Menu" className="w-full h-auto" />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </Tabs.Content>
 
             {/* Map Content */}
             <Tabs.Content value="map" className="outline-none animate-in fade-in slide-in-from-bottom-2 duration-300">
