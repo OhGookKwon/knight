@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { updateStore, deleteStore } from "@/app/actions/store";
-import { deleteReview } from "@/app/actions/review";
-import { ChevronLeft, Trash2, UserRound } from "lucide-react";
+import { deleteReview, approveReview } from "@/app/actions/review";
+import { ChevronLeft, Trash2, UserRound, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
@@ -297,8 +297,65 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                     </div>
                 )
             }
+            {/* Review Management */}
+            <section className="mt-12 pt-8 border-t border-gray-800 space-y-6">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    리뷰 관리
+                    {store.reviews.filter((r: any) => !r.isApproved).length > 0 && (
+                        <span className="bg-pink-600 text-white text-xs px-2 py-1 rounded-full animate-pulse">
+                            {store.reviews.filter((r: any) => !r.isApproved).length}건 대기중
+                        </span>
+                    )}
+                </h2>
 
-            {/* Staff Management */}
+                <div className="space-y-4">
+                    {store.reviews.length === 0 ? (
+                        <p className="text-gray-500 text-sm">등록된 리뷰가 없습니다.</p>
+                    ) : (
+                        store.reviews.map((review: any) => (
+                            <div key={review.id} className={`p-4 rounded-xl border ${review.isApproved ? 'bg-gray-900/30 border-gray-800' : 'bg-pink-900/10 border-pink-500/50'}`}>
+                                <div className="flex justify-between items-start mb-2">
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="font-bold text-white text-sm">{review.nickname || '손님'}</span>
+                                            <div className="flex text-yellow-500">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <span key={i} className={`text-xs ${i < review.rating ? 'opacity-100' : 'opacity-20'}`}>★</span>
+                                                ))}
+                                            </div>
+                                            {!review.isApproved && (
+                                                <span className="text-[10px] text-pink-400 font-bold border border-pink-500/30 px-1.5 rounded">승인 대기</span>
+                                            )}
+                                        </div>
+                                        <p className="text-gray-300 text-sm">{review.content}</p>
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                        {new Date(review.createdAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end gap-2 mt-4">
+                                    <form action={deleteReview.bind(null, review.id, store.id)}>
+                                        <button className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 px-3 py-1.5 rounded-lg border border-red-900/50 hover:bg-red-900/20 transition-colors">
+                                            <XCircle size={14} />
+                                            삭제
+                                        </button>
+                                    </form>
+                                    {!review.isApproved && (
+                                        <form action={approveReview.bind(null, review.id, store.id)}>
+                                            <button className="text-xs text-green-400 hover:text-green-300 flex items-center gap-1 px-3 py-1.5 rounded-lg border border-green-900/50 hover:bg-green-900/20 transition-colors font-bold">
+                                                <CheckCircle size={14} />
+                                                승인
+                                            </button>
+                                        </form>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </section>
+
             <section className="mt-12 pt-8 border-t border-gray-800 space-y-6">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-white">직원 관리</h2>

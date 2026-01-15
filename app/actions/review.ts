@@ -65,8 +65,19 @@ export async function deleteReview(reviewId: string, storeId: string) {
     if (!session) throw new Error("Unauthorized");
 
     const user = JSON.parse(session.value);
+    const user = JSON.parse(session.value);
+
+    // Check if user is Super Admin or Owner of the store
     if (user.role !== 'SUPER_ADMIN') {
-        throw new Error("Unauthorized");
+        // Verify ownership
+        const store = await prisma.store.findUnique({
+            where: { id: storeId },
+            select: { ownerId: true }
+        });
+
+        if (!store || store.ownerId !== user.id) {
+            throw new Error("Unauthorized");
+        }
     }
 
     await prisma.review.delete({
@@ -95,4 +106,33 @@ export async function updateReview(reviewId: string, storeId: string, formData: 
     });
 
     revalidatePath(`/admin/stores/${storeId}`);
+}
+
+export async function approveReview(reviewId: string, storeId: string) {
+    const cookieStore = await cookies();
+    const session = cookieStore.get('session');
+    if (!session) throw new Error("Unauthorized");
+
+    const user = JSON.parse(session.value);
+
+    // Check if user is Super Admin or Owner of the store
+    if (user.role !== 'SUPER_ADMIN') {
+        // Verify ownership
+        const store = await prisma.store.findUnique({
+            where: { id: storeId },
+            select: { ownerId: true }
+        });
+
+        if (!store || store.ownerId !== user.id) {
+            throw new Error("Unauthorized");
+        }
+    }
+
+    await prisma.review.update({
+        where: { id: reviewId },
+        data: { isApproved: true }
+    });
+
+    revalidatePath(`/admin/stores/${storeId}`);
+    revalidatePath(`/stores/${storeId}`);
 }

@@ -11,7 +11,7 @@ const formatDate = (date: Date) => {
 
 export default async function ReviewList({ storeId }: { storeId: string }) {
     const reviews = await prisma.review.findMany({
-        where: { storeId },
+        where: { storeId, isApproved: true },
         orderBy: { createdAt: 'desc' },
         include: { user: true }
     });

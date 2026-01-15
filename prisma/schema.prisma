@@ -101,6 +101,7 @@ model Review {
   content      String?
   nickname     String?  // Guest or User nickname
   receiptImage String?
+  isApproved   Boolean  @default(false)
   createdAt    DateTime @default(now())
 
   storeId      String
