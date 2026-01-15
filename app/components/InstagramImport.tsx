@@ -25,52 +25,72 @@ export default function InstagramImport() {
             const nameInput = document.getElementsByName('name')[0] as HTMLInputElement;
             if (nameInput && name) nameInput.value = name;
 
-            const descInput = document.getElementsByName('description')[0] as HTMLTextAreaElement;
-            // Instagram description can be long, maybe put it in 'systemDescription' or 'notice' if description is missing? 
-            // The user form has 'description' (which might be 'systemDescription' in schema? Let's check schema/form)
-            // Looking at the form code: 
-            // <textarea name="systemDescription" ... />
-            // <input name="notice" ... />
-            // Oh, the schema has `description`? Let me check schema again. 
-            // Schema has `description String?`.
-            // Form code I saw: `systemDescription` textarea... 
-            // Wait, I saw `formData.get('description')` in `updateStore` action, but NOT in the JSX form I read earlier?
-            // Let me double check the form field names.
-            // In `app/admin/stores/[id]/page.tsx`:
-            // name="systemDescription"
-            // name="notice"
-            // I DO NOT see a name="description" input in the code snippet I read in `ManageStorePage`.
-            // But `updateStore` action retrieves `description`. This implies there might be a missing field or I missed it.
-            // Let's assume I should populate `systemDescription` or `notice` for now, OR add the `description` field.
-            // Actually, description is usually the "Introduciton". `systemDescription` is specific.
-            // Let's map Instagram Bio -> `systemDescription` (since it's usually the intro).
+            // Intelligent Bio Parsing
+            let bio = description || '';
+            const lines = bio.split(/\r?\n|\r|\s{2,}/); // Split by newline or multiple spaces
 
+            let foundAddress = '';
+            let foundHours = '';
+            let foundCharge = '';
+            let remainingBio = [];
+
+            for (const line of lines) {
+                const l = line.trim();
+                if (!l) continue;
+
+                // Address Detection
+                if (l.match(/(東京都|新宿区|Kabukicho|Shin-Okubo|区|〒)/i)) {
+                    if (!foundAddress) foundAddress = l;
+                    else foundAddress += ' ' + l; // Append if multiple address lines
+                }
+                // Opening Hours Detection
+                else if (l.match(/(OPEN|CLOSE|営業|Time|~|～|:)/i) && l.match(/\d/)) {
+                    // Check for time-like digits to avoid false positives
+                    if (!foundHours) foundHours = l;
+                    else foundHours += ' / ' + l;
+                }
+                // System/Charge Detection
+                else if (l.match(/(Charge|SET|System|Price|料金|￥|¥|엔)/i)) {
+                    if (!foundCharge) foundCharge = l;
+                    else foundCharge += '\n' + l;
+                }
+                else {
+                    remainingBio.push(l);
+                }
+            }
+
+            // Fill Fields
+            const addrInput = document.getElementsByName('address')[0] as HTMLInputElement;
+            if (addrInput && foundAddress) addrInput.value = foundAddress;
+
+            const hoursInput = document.getElementsByName('openingHours')[0] as HTMLInputElement;
+            if (hoursInput && foundHours) hoursInput.value = foundHours;
+
+            const chargeInput = document.getElementsByName('basicCharge')[0] as HTMLInputElement;
+            if (chargeInput && foundCharge) chargeInput.value = foundCharge.split('\n')[0]; // Take first line for basic charge
+
+            // Put full bio in system description (or just remaining?)
+            // Usually user wants full context + extracted fields
             const systemDescInput = document.getElementsByName('systemDescription')[0] as HTMLTextAreaElement;
-            if (systemDescInput && description) systemDescInput.value = description;
+            if (systemDescInput) {
+                // Combine Charge info + Remaining Bio for full description
+                const fullDesc = (foundCharge ? foundCharge + '\n\n' : '') + remainingBio.join('\n');
+                systemDescInput.value = fullDesc || bio;
+            }
 
-            // Image is trickier because it's a file input usually, or a hidden input for existing URL?
-            // The form has: <input type="hidden" name="mainImage" ... />
-            // I can update this hidden input. AND I should show a preview.
-            // This requires some UI State manipulation which is hard from outside.
-            // BUT, if I update the hidden input, and then submit, it might work IF the user doesn't select a new file.
-            // However, the preview <img> won't update automatically unless I hack it too.
-
+            // Image Handler
             const mainImageHidden = document.getElementsByName('mainImage')[0] as HTMLInputElement;
             if (mainImageHidden && image) {
                 mainImageHidden.value = image;
-                // Try to find the preview img
                 const imgPreview = mainImageHidden.parentElement?.querySelector('img');
                 if (imgPreview) {
                     imgPreview.src = image;
-                    // Also remove the "opacity-80" or placeholder classes if any?
-                } else {
-                    // If no image existed, maybe I can't easily show preview without adding an img tag.
-                    // It's okay, the hidden input update is key.
-                    alert("성공! 내용을 불러왔습니다.\n(이미지는 저장 후 적용됩니다)");
                 }
-            } else {
-                alert("성공! 제목과 내용을 불러왔습니다.");
+                // Try to find the container div to remove placeholder styling if needed? 
+                // Currently generic <img> tag is OK.
             }
+
+            alert(`성공! 내용을 불러왔습니다.\n\n[추출된 정보]\n가게명: ${name}\n주소: ${foundAddress ? 'O' : 'X'}\n영업시간: ${foundHours ? 'O' : 'X'}\n가격정보: ${foundCharge ? 'O' : 'X'}`);
         }
 
         setIsLoading(false);
