@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     siteName: "K-Night Shinjuku",
+  },
+  verification: {
+    google: "pet1OVUuE5c7TPQqC9QcgdgOfDmttMGCp7eqcUB09Cw",
   }
 };
 
