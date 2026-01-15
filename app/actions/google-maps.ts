@@ -2,19 +2,17 @@
 
 export async function scrapeGoogleMaps(url: string) {
     try {
-        console.log(`Scraping Google Maps URL: ${url}`);
+        console.log(`[GoogleMaps] Scraping URL: ${url}`);
 
-        // Strategy: Use a Bot User-Agent (Facebook/Twitter). 
-        // Google Maps usually expects these bots and serves static HTML with OG tags immediately.
-        // Standard Browser UA often gets redirected to a Consent page or dynamic JS loader.
+        // Strategy: Use Googlebot User-Agent. 
+        // Google often serves the "Place" metadata to its own bot for indexing.
         const headers = {
-            'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
         };
 
         // 1. Follow Redirect (Short URL -> Long URL)
-        // We use 'follow' automatically now, as manual handling is complex with cookies
         const response = await fetch(url, {
             method: 'GET',
             redirect: 'follow',
@@ -23,7 +21,7 @@ export async function scrapeGoogleMaps(url: string) {
         });
 
         const finalUrl = response.url;
-        console.log(`Final URL: ${finalUrl}`);
+        console.log(`[GoogleMaps] Final URL: ${finalUrl}`);
 
         const html = await response.text();
         // console.log(`HTML Preview: ${html.substring(0, 500)}`); // Debug
@@ -52,23 +50,31 @@ export async function scrapeGoogleMaps(url: string) {
             if (titleMatch) title = titleMatch[1];
         }
 
+        console.log(`[GoogleMaps] Extracted Title: ${title}`);
+
         if (!title) {
             console.error("No title found in HTML");
-            return { error: '정보를 가져올 수 없습니다. (Google이 봇 접근을 막았거나 페이지 구조가 다릅니다)' };
+            return { error: '정보를 가져올 수 없습니다. (페이지 제목 없음)' };
         }
 
         // Clean Title: "Store Name - Google Maps" -> "Store Name"
-        title = title.replace(/ - Google 지도/g, '').replace(/ - Google Maps/g, '');
+        let cleanTitle = title
+            .replace(/ - Google 지도/g, '')
+            .replace(/ - Google Maps/g, '');
+
+        // Check if we just got the generic map page
+        if (cleanTitle.trim() === 'Google 지도' || cleanTitle.trim() === 'Google Maps') {
+            return { error: '특정 가게 정보를 찾지 못했습니다. (메인 지도 페이지로 리다이렉트됨). 링크를 다시 확인해주세요.' };
+        }
 
         // 4. Extract Name and Address from Title
         // Typical OG Title Format: "Store Name · Address" (separated by Middle Dot)
-        let name = title;
+        let name = cleanTitle;
         let address = '';
 
-        if (title.includes('·')) {
-            const parts = title.split('·');
+        if (cleanTitle.includes('·')) {
+            const parts = cleanTitle.split('·');
             name = parts[0].trim();
-            // Join the rest as address (in case address also has dots, though unlikely for middle dot)
             address = parts.slice(1).join('·').trim();
         }
 
