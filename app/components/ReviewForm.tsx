@@ -19,8 +19,8 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
             alert("리뷰가 접수되었습니다. 관리자 승인 후 게시됩니다.");
         } catch (error) {
             console.error(error);
-            if (error instanceof Error && error.message === "이미 리뷰를 작성하셨습니다.") {
-                alert("이미 리뷰를 작성하셨습니다.");
+            if (error instanceof Error) {
+                alert(error.message);
             } else {
                 alert("리뷰 등록에 실패했습니다.");
             }

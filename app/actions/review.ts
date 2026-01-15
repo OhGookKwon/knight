@@ -18,7 +18,7 @@ export async function submitReview(storeId: string, formData: FormData) {
     const hasReviewed = cookieStore.get(`reviewed_${storeId}`);
 
     if (hasReviewed) {
-        throw new Error("이미 리뷰를 작성하셨습니다.");
+        throw new Error("하루에 한 번만 리뷰를 작성할 수 있습니다.");
     }
 
     // Find a valid user to attribute the review to (Demo mode)
