@@ -20,39 +20,41 @@ export default function InstagramImport() {
             const { name, description, image } = result.data;
 
             // DOM Manipulation to fill inputs
-            // WARNING: This depends on the input names in the form
-
             const nameInput = document.getElementsByName('name')[0] as HTMLInputElement;
-            if (nameInput && name) nameInput.value = name;
+            if (nameInput && name) {
+                // Remove emoji/special chars from name if it seems excessive? 
+                // Keep it simple for now, user can edit.
+                nameInput.value = name;
+            }
 
             // Intelligent Bio Parsing
             let bio = description || '';
-            const lines = bio.split(/\r?\n|\r|\s{2,}/); // Split by newline or multiple spaces
+            const lines = bio.split(/\r?\n|\r/); // Split strictly by newline to preserve structure
 
             let foundAddress = '';
             let foundHours = '';
-            let foundCharge = '';
+            let foundCharge = [];
+            let foundSystem = []; // Additional system info
             let remainingBio = [];
 
             for (const line of lines) {
                 const l = line.trim();
                 if (!l) continue;
 
-                // Address Detection
-                if (l.match(/(東京都|新宿区|Kabukicho|Shin-Okubo|区|〒)/i)) {
+                // Address Detection (more robust)
+                if (l.match(/(東京都|新宿区|Kabukicho|Shin-Okubo|区|〒|[0-9]{3}-[0-9]{4}|ビル|F$|階$)/i)) {
+                    // Check if it looks like an address line
                     if (!foundAddress) foundAddress = l;
-                    else foundAddress += ' ' + l; // Append if multiple address lines
+                    else foundAddress += ' ' + l;
                 }
                 // Opening Hours Detection
-                else if (l.match(/(OPEN|CLOSE|営業|Time|~|～|:)/i) && l.match(/\d/)) {
-                    // Check for time-like digits to avoid false positives
+                else if (l.match(/(OPEN|CLOSE|営業|Time|~|～|:|PM|AM|Last|L\.O|24H)/i) && l.match(/\d/)) {
                     if (!foundHours) foundHours = l;
                     else foundHours += ' / ' + l;
                 }
-                // System/Charge Detection
-                else if (l.match(/(Charge|SET|System|Price|料金|￥|¥|엔)/i)) {
-                    if (!foundCharge) foundCharge = l;
-                    else foundCharge += '\n' + l;
+                // Charge/System Detection (Prices, Sets, Taxes)
+                else if (l.match(/(Charge|SET|System|Price|料金|￥|¥|円|엔|won|Tax|SC|サービス|飲み放題|Set|Time|Hour|Extension|延長)/i)) {
+                    foundCharge.push(l);
                 }
                 else {
                     remainingBio.push(l);
@@ -67,15 +69,30 @@ export default function InstagramImport() {
             if (hoursInput && foundHours) hoursInput.value = foundHours;
 
             const chargeInput = document.getElementsByName('basicCharge')[0] as HTMLInputElement;
-            if (chargeInput && foundCharge) chargeInput.value = foundCharge.split('\n')[0]; // Take first line for basic charge
+            if (chargeInput && foundCharge.length > 0) {
+                // Try to find the line with "Set" or "Basic" or just the first price line
+                const basicLine = foundCharge.find(l => l.match(/(Set|Basic|Charge|1H|60min)/i)) || foundCharge[0];
+                chargeInput.value = basicLine;
+            }
 
-            // Put full bio in system description (or just remaining?)
-            // Usually user wants full context + extracted fields
             const systemDescInput = document.getElementsByName('systemDescription')[0] as HTMLTextAreaElement;
             if (systemDescInput) {
-                // Combine Charge info + Remaining Bio for full description
-                const fullDesc = (foundCharge ? foundCharge + '\n\n' : '') + remainingBio.join('\n');
+                // Combine Charge info + System info for full description
+                // We put ALL found charge lines into system description for detail
+                const fullDesc = [
+                    ...foundCharge,
+                    '',
+                    ...remainingBio
+                ].join('\n').trim();
+
                 systemDescInput.value = fullDesc || bio;
+            }
+
+            // Store Name Guessing from Bio (if Name input is empty or looks generic)
+            // Sometimes bio starts with "【Store Name】"
+            const nameMatch = bio.match(/^【(.*?)】/);
+            if (nameMatch && nameInput && (!nameInput.value || nameInput.value === 'Instagram')) {
+                nameInput.value = nameMatch[1];
             }
 
             // Image Handler
@@ -86,11 +103,9 @@ export default function InstagramImport() {
                 if (imgPreview) {
                     imgPreview.src = image;
                 }
-                // Try to find the container div to remove placeholder styling if needed? 
-                // Currently generic <img> tag is OK.
             }
 
-            alert(`성공! 내용을 불러왔습니다.\n\n[추출된 정보]\n가게명: ${name}\n주소: ${foundAddress ? 'O' : 'X'}\n영업시간: ${foundHours ? 'O' : 'X'}\n가격정보: ${foundCharge ? 'O' : 'X'}`);
+            alert(`성공! 정보를 가져왔습니다.\n\n[자동 입력 결과]\n체크된 항목이 입력되었습니다:\n\n가게명: ${name} ${nameMatch ? '(Bio에서 발견)' : ''}\n주소: ${foundAddress ? '✅' : '❌'}\n영업시간: ${foundHours ? '✅' : '❌'}\n시스템/가격: ${foundCharge.length > 0 ? '✅' : '❌'}`);
         }
 
         setIsLoading(false);
