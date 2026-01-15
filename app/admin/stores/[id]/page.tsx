@@ -260,6 +260,23 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                     </div>
                 </section>
 
+                {/* Staff Introduction Settings */}
+                <section className="bg-gray-900/50 p-5 rounded-2xl border border-gray-800 space-y-4">
+                    <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                        <span className="w-1 h-4 bg-yellow-500 rounded-full" /> 직원 소개글
+                    </h2>
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-500 uppercase">직원 컨셉 및 특징 소개</label>
+                        <textarea
+                            name="staffDescription"
+                            defaultValue={store.staffDescription || ''}
+                            rows={3}
+                            placeholder="예: 저희 가게 직원들은 모두 한국어에 능통하며 밝고 에너지 넘치는 스타일입니다."
+                            className="w-full bg-black border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500 resize-none transition-colors"
+                        />
+                    </div>
+                </section>
+
                 <SubmitButton
                     text="변경사항 저장"
                     loadingText="저장 중..."
