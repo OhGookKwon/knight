@@ -7,8 +7,16 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "K-Night Shinjuku",
-  description: "Discover the best K-Pop bars in Shinjuku",
+  title: "K-Night Shinjuku | 도쿄바 신주쿠 걸즈바 - 한국어 가능",
+  description: "도쿄 신주쿠, 신오오쿠보 지역의 한국어 가능한 걸즈바와 인기 바를 찾아보세요. 도쿄 여행의 밤을 책임질 K-Night 추천 명소.",
+  keywords: ["도쿄바", "신주쿠 바", "걸즈바", "도쿄 걸즈바", "한국어 가능 바", "한국어 가능 걸즈바", "신주쿠", "신오오쿠보", "도쿄 술집", "걸즈바 추천"],
+  openGraph: {
+    title: "K-Night Shinjuku | 도쿄바 신주쿠 걸즈바",
+    description: "도쿄 거주 14년차 개발자가 추천하는 신주쿠, 신오오쿠보 한국어 가능 걸즈바 & 바 가이드.",
+    type: "website",
+    locale: "ko_KR",
+    siteName: "K-Night Shinjuku",
+  }
 };
 
 export default function RootLayout({
