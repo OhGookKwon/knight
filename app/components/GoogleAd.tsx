@@ -27,7 +27,7 @@ export default function GoogleAd() {
                 className="adsbygoogle"
                 style={{ display: 'block', width: '100%' }}
                 data-ad-client="ca-pub-3019197254307208" // Replace with your actual Publisher ID
-                data-ad-slot="XXXXXXXXXX" // TODO: Replace with your actual Ad Slot ID
+                data-ad-slot="8710030407" // TODO: Replace with your actual Ad Slot ID
                 data-ad-format="fluid"
                 data-layout-key="-fb+5w+4e-db+86"
                 data-full-width-responsive="true"
