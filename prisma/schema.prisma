@@ -7,20 +7,20 @@ generator client {
 }
 
 // Local Development (SQLite)
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
 
 // Production (PostgreSQL - Supabase)
 // 1. Comment out the SQLite block above
 // 2. Uncomment the block below
 // 3. Set DATABASE_URL (Transaction Mode: 6543) and DIRECT_URL (Session Mode: 5432) in .env
-// datasource db {
-//   provider  = "postgresql"
-//   url       = env("DATABASE_URL")
-//   directUrl = env("DIRECT_URL")
-// }
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
 
 model User {
   id        String   @id @default(uuid())
