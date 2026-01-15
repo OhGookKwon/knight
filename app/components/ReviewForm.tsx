@@ -1,18 +1,12 @@
-'use client';
-
-import { useState, useRef } from 'react';
-import { Star, Loader2 } from 'lucide-react';
-import { submitReview } from '@/app/actions/review';
+import SubmitButton from './SubmitButton';
 
 export default function ReviewForm({ storeId }: { storeId: string }) {
     const [rating, setRating] = useState(5);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // const [isSubmitting, setIsSubmitting] = useState(false); // Removed in favor of useFormStatus
 
-    const [reviews, setReviews] = useState([]); // This might be for optimistic updates later, but for now just form logic
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (formData: FormData) => {
-        setIsSubmitting(true);
         try {
             await submitReview(storeId, formData);
             formRef.current?.reset(); // Clear text inputs
@@ -20,8 +14,6 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
         } catch (error) {
             console.error(error);
             alert("리뷰 등록에 실패했습니다.");
-        } finally {
-            setIsSubmitting(false);
         }
     };
 
@@ -58,18 +50,11 @@ export default function ReviewForm({ storeId }: { storeId: string }) {
                     rows={3}
                     className="w-full bg-black border border-gray-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-pink-500 resize-none"
                 />
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    {isSubmitting ? (
-                        <>
-                            <Loader2 size={14} className="animate-spin text-pink-500" />
-                            <span>등록 중...</span>
-                        </>
-                    ) : '리뷰 등록'}
-                </button>
+                <SubmitButton
+                    text="리뷰 등록"
+                    loadingText="등록 중..."
+                    className="w-full py-3 text-sm"
+                />
             </form>
         </div>
     );
