@@ -47,6 +47,11 @@ export async function updateStore(storeId: string, formData: FormData) {
     const uploadedMenu = await uploadFile(menuImageFile);
     if (uploadedMenu) menuImage = uploadedMenu;
 
+    // Handle Deletion Flags
+    if (formData.get('deleteMenuImage') === 'on') {
+        menuImage = null as any; // Allow null to clear the field in Prisma
+    }
+
     // New Fields
     const openingHours = formData.get('openingHours') as string;
     const basicCharge = formData.get('basicCharge') as string;

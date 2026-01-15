@@ -154,6 +154,12 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                         {store.menuImage && (
                             <div className="relative h-40 w-full rounded-xl overflow-hidden mb-2 border border-gray-800">
                                 <img src={store.menuImage} alt="Menu" className="w-full h-full object-cover" />
+                                <div className="absolute top-2 right-2 bg-black/60 rounded-full px-3 py-1">
+                                    <label className="text-xs text-red-500 flex items-center gap-1 cursor-pointer font-bold">
+                                        <input type="checkbox" name="deleteMenuImage" className="w-4 h-4" />
+                                        삭제
+                                    </label>
+                                </div>
                             </div>
                         )}
                         <input type="hidden" name="menuImage" value={store.menuImage || ''} />
