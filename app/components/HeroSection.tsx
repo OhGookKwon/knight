@@ -25,7 +25,7 @@ export default function HeroSection() {
                         K-NIGHT OPEN ✨
                     </span>
                     <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-xl" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
-                        신주쿠의 밤,<br />
+                        신주쿠의 밤놀이,<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
                             한국어로 통하다
                         </span>
