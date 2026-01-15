@@ -7,6 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/app/components/DeleteButton";
 import SubmitButton from "@/app/components/SubmitButton";
+import StaffAttendanceToggle from "@/app/components/StaffAttendanceToggle";
 import { cookies } from "next/headers";
 
 export default async function ManageStorePage({ params }: { params: Promise<{ id: string }> }) {
@@ -309,9 +310,17 @@ export default async function ManageStorePage({ params }: { params: Promise<{ id
                                         </div>
                                     )}
                                 </div>
-                                <div>
+                                <div className="flex-1">
                                     <div className="text-white font-bold text-sm">{staff.name}</div>
-                                    <div className="text-gray-500 text-xs">Lv.{staff.koreanLevel}</div>
+                                    <div className="text-gray-500 text-xs text-ellipsis overflow-hidden whitespace-nowrap">Lv.{staff.koreanLevel}</div>
+                                </div>
+                                <div onClick={(e) => e.stopPropagation()} className="relative z-10 flex flex-col items-center gap-1">
+                                    <StaffAttendanceToggle
+                                        staffId={staff.id}
+                                        storeId={store.id}
+                                        initialIsWorking={staff.isWorkingToday}
+                                    />
+                                    <span className="text-[10px] text-gray-500">{staff.isWorkingToday ? '출근' : '휴무'}</span>
                                 </div>
                             </div>
                         </Link>

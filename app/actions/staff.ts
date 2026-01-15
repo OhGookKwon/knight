@@ -109,3 +109,15 @@ export async function deleteStaff(staffId: string, storeId: string) {
     revalidatePath(`/admin/stores/${storeId}`);
     revalidatePath(`/stores/${storeId}`);
 }
+
+export async function toggleStaffWorking(staffId: string, storeId: string, isWorking: boolean) {
+    if (!staffId) return;
+
+    await prisma.staff.update({
+        where: { id: staffId },
+        data: { isWorkingToday: isWorking }
+    });
+
+    revalidatePath(`/admin/stores/${storeId}`);
+    revalidatePath(`/stores/${storeId}`);
+}
