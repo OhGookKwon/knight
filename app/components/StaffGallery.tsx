@@ -34,7 +34,7 @@ export default function StaffGallery({ isOpen, onClose, images, staffName }: Sta
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 animate-in fade-in duration-200" />
                 <Dialog.Content className="fixed inset-0 z-50 flex items-center justify-center p-4 outline-none">
-                    <div className="relative w-full max-w-3xl aspect-[3/4] sm:aspect-video bg-black rounded-lg overflow-hidden shadow-2xl flex flex-col">
+                    <div className="relative w-full max-w-[400px] aspect-[3/4] bg-black rounded-lg overflow-hidden shadow-2xl flex flex-col">
 
                         {/* Header */}
                         <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10 bg-gradient-to-b from-black/60 to-transparent">
