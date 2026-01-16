@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import BottomNav from "./components/BottomNav";
+import JsonLd from "./components/JsonLd";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "K-Night Shinjuku | 도쿄바 신주쿠 걸즈바 - 한국어 가능",
-  description: "도쿄 신주쿠, 신오오쿠보 지역의 한국어 가능한 걸즈바와 인기 바를 찾아보세요. 도쿄 여행의 밤을 책임질 K-Night 추천 명소.",
-  keywords: ["도쿄바", "신주쿠 바", "걸즈바", "도쿄 걸즈바", "한국어 가능 바", "한국어 가능 걸즈바", "신주쿠", "신오오쿠보", "도쿄 술집", "걸즈바 추천"],
+  title: "신주쿠 밤문화 가이드 | 15년 거주 현지인 추천 걸즈바",
+  description: "일본 15년 거주 현지인이 소개하는 신주쿠 밤문화 가이드. 2030 한국인 여행객을 위한 안전하고 핫한 걸즈바, 바 추천.",
+  keywords: ["신주쿠 밤문화", "도쿄 여행", "신주쿠 바", "걸즈바 추천", "가부키초", "신오오쿠보", "도쿄 현지인 추천", "2030 도쿄 여행", "신주쿠 걸즈바"],
   openGraph: {
-    title: "K-Night Shinjuku | 도쿄바 신주쿠 걸즈바",
-    description: "도쿄 거주 14년차 개발자가 추천하는 신주쿠, 신오오쿠보 한국어 가능 걸즈바 & 바 가이드.",
+    title: "신주쿠 밤문화 가이드 | 15년 거주 현지인 추천 걸즈바",
+    description: "일본 15년 거주 현지인이 소개하는 신주쿠 밤문화 가이드. 2030 한국인 여행객을 위한 안전하고 핫한 걸즈바, 바 추천.",
     type: "website",
     locale: "ko_KR",
     siteName: "K-Night Shinjuku",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
     google: "pet1OVUuE5c7TPQqC9QcgdgOfDmttMGCp7eqcUB09Cw",
   }
 };
+
 
 export default function RootLayout({
   children,
@@ -32,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased`}
       >
+        <JsonLd />
         <div className="mx-auto max-w-[640px] min-h-screen bg-[var(--md-sys-color-background)] shadow-2xl relative pb-20 overflow-x-hidden">
           {children}
           <BottomNav />
