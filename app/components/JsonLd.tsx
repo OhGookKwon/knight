@@ -4,8 +4,8 @@ export default function JsonLd() {
         "@type": "TravelAgency",
         "name": "K-Night Shinjuku",
         "description": "일본 15년 거주 현지인이 소개하는 신주쿠 밤문화 가이드",
-        "url": "https://www.k-night.com",
-        "image": "https://www.k-night.com/og-image.jpg",
+        "url": "https://www.kooon59.work",
+        "image": "https://www.kooon59.work/og-image.jpg",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Shinjuku",
