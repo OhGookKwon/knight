@@ -7,12 +7,12 @@ import DeleteButton from "@/app/components/DeleteButton";
 import SubmitButton from "@/app/components/SubmitButton";
 import { cookies } from "next/headers";
 
-function DeleteImageButton({ imageId, storeId }: { imageId: string, storeId: string }) {
+import DeleteImageFormButton from "@/app/components/DeleteImageFormButton";
+
+function DeleteImageButton({ imageId, staffId, storeId }: { imageId: string, staffId: string, storeId: string }) {
     return (
-        <form action={deleteStaffImage.bind(null, imageId, storeId)}>
-            <button className="p-2 bg-red-500/80 hover:bg-red-600 text-white rounded-full transition-colors">
-                <Trash2 size={16} />
-            </button>
+        <form action={deleteStaffImage.bind(null, imageId, staffId, storeId)}>
+            <DeleteImageFormButton />
         </form>
     );
 }
@@ -165,7 +165,7 @@ export default async function StaffFormPage({ params }: { params: Promise<{ id: 
                                 <div key={img.id} className="relative aspect-square rounded-lg overflow-hidden group border border-gray-800">
                                     <img src={img.url} alt="Staff Gallery" className="w-full h-full object-cover" />
                                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <DeleteImageButton imageId={img.id} storeId={id} />
+                                        <DeleteImageButton imageId={img.id} staffId={staff!.id} storeId={id} />
                                     </div>
                                 </div>
                             ))}

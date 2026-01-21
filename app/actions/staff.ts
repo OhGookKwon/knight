@@ -162,11 +162,12 @@ export async function deleteStaff(staffId: string, storeId: string) {
     revalidatePath(`/stores/${storeId}`);
 }
 
-export async function deleteStaffImage(imageId: string, storeId: string) {
+export async function deleteStaffImage(imageId: string, staffId: string, storeId: string) {
     await prisma.staffImage.delete({
         where: { id: imageId }
     });
 
+    revalidatePath(`/admin/stores/${storeId}/staff/${staffId}`);
     revalidatePath(`/admin/stores/${storeId}`);
     revalidatePath(`/stores/${storeId}`);
 }
